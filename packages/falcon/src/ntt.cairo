@@ -1,8 +1,12 @@
+// SPDX-FileCopyrightText: 2025 StarkWare Industries Ltd.
+//
+// SPDX-License-Identifier: MIT
+
 //! Implementation of Number Theoretic Transform (NTT) for polynomials in Z_q[x]/(phi)
 //! Ported from https://github.com/tprest/falcon.py/blob/master/ntt.py
 
 use crate::ntt_constants::{get_even_roots, get_even_roots_inv};
-use crate::ring::{add_mod, mul3_mod, mul_mod, sub_mod};
+use crate::zq::{add_mod, mul3_mod, mul_mod, sub_mod};
 
 pub const I2: u16 = 6145; // Inverse of 2 mod q
 pub const I2_INV: u16 = 6145; // Inverse of 2 mod q
@@ -123,7 +127,7 @@ pub fn ntt(mut f: Span<u16>) -> Span<u16> {
         let odd = sub_mod(*f[0], f1_j);
         array![even, odd].span()
     } else {
-        panic!("This should not happen if n is a power of 2");
+        assert(false, 'n is not a power of 2');
         array![].span()
     }
 }
@@ -141,7 +145,7 @@ pub fn intt(mut f_ntt: Span<u16>) -> Span<u16> {
         let odd = mul3_mod(I2, sub_mod(*f_ntt[0], *f_ntt[1]), SQR1_INV);
         array![even, odd].span()
     } else {
-        panic!("This should not happen if n is a power of 2");
+        assert(false, 'n is not a power of 2');
         array![].span()
     }
 }

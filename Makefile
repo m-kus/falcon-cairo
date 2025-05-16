@@ -5,8 +5,11 @@ install-stwo:
 	RUSTFLAGS="-C target-cpu=native -C opt-level=3" \
 		cargo install \
 		--git https://github.com/starkware-libs/stwo-cairo \
-		--rev bde0d3a552c7280e27b3a249d85ee37ac55f642e \
+		--rev 61d338ee93f11a735eb5cd86f024f7a73d59d420 \
 		adapted_stwo
+
+install-cairo-execute:
+	cargo install --git https://github.com/ohad-agadi/cairo.git --rev 24c4130 cairo-execute
 
 falcon-execute:
 	rm -rf $(TARGET_DIR)/execute/falcon \
@@ -18,7 +21,7 @@ falcon-args:
 	python packages/falcon/scripts/generate_args.py --n 1024 --num_signatures 1 > packages/falcon/tests/data/args_1024_1.json
 
 falcon-build:
-	scarb --profile release build
+	scarb --profile release build --package falcon
 
 falcon-cairo-execute:
 	rm -rf $(TARGET_DIR)/execute/falcon \
@@ -42,3 +45,6 @@ falcon-prove:
 		--proof_path $(TARGET_DIR)/proof.json \
 		--params_json prover_params.json \
 		--verify
+
+falcon-burn:
+	scarb burn --package falcon --arguments-file packages/falcon/tests/data/args_512_1.json --output-file target/falcon.svg --open-in-browser

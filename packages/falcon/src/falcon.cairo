@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025 StarkWare Industries Ltd.
+//
+// SPDX-License-Identifier: MIT
+
 use core::num::traits::{CheckedAdd, CheckedMul};
 use crate::ntt::{mul_zq, sub_zq};
 
@@ -90,7 +94,7 @@ fn sig_bound(degree: u32) -> u32 {
     } else if degree == 2 {
         101498
     } else {
-        panic!("Unsupported degree");
+        assert(false, 'Unsupported degree');
         0
     }
 }
